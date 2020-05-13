@@ -1,2 +1,3 @@
-# KantineSimulatie
-Project 1.4 SE/NSE
+# ITVP19DAV1A
+
+Project KantineSimulatie SE/NSE
