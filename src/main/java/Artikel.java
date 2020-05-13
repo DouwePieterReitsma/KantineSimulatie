@@ -1,5 +1,12 @@
 import java.math.BigDecimal;
 
+/*
+* week 1: opgave 1
+*
+* Declaratie is het opstellen van een variabele. Initialisatie is het geven van een waarde aan een variabele.
+*
+* */
+
 public class Artikel {
     private String naam;
     private BigDecimal prijs;
