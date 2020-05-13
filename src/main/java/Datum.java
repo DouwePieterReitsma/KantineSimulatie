@@ -4,7 +4,9 @@ public class Datum {
 	private int jaar;
 
 	public Datum() {
-
+		dag = 0;
+		maand = 0;
+		jaar = 0;
 	}
 
 	public Datum(int dag, int maand, int jaar) {
