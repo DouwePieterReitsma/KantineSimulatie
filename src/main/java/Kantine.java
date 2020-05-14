@@ -2,6 +2,7 @@ public class Kantine {
 
     private Kassa kassa;
     private KassaRij kassarij;
+    private KantineAanbod kantineAanbod;
 
     /**
      * Constructor
@@ -28,6 +29,22 @@ public class Kantine {
     }
 
     /**
+     * In deze methode wordt een dienblad met artikelen
+     * in de kassarij geplaatst.
+     *
+     * @param dienblad
+     * @param artikelnamen
+     */
+    public void loopPakSluitAan(Dienblad dienblad, String[] artikelnamen) {
+        // method body omitted
+        for(String artikelNaam : artikelnamen) {
+            Artikel artikel = kantineAanbod.getArtikel(artikelNaam);
+
+            dienblad.voegToe(artikel);
+        }
+    }
+
+    /**
      * Deze methode handelt de rij voor de kassa af.
      */
     public void verwerkRijVoorKassa() {
@@ -41,29 +58,42 @@ public class Kantine {
         }
     }
 
-    /**
-     * Deze methode telt het geld uit de kassa
-     *
-     * @return hoeveelheid geld in kassa
-     */
-    public double hoeveelheidGeldInKassa() {
-        return kassa.hoeveelheidGeldInKassa();
+//    /**
+//     * Deze methode telt het geld uit de kassa
+//     *
+//     * @return hoeveelheid geld in kassa
+//     */
+//    public double hoeveelheidGeldInKassa() {
+//        return kassa.hoeveelheidGeldInKassa();
+//    }
+//
+//    /**
+//     * Deze methode geeft het aantal gepasseerde artikelen.
+//     *
+//     * @return het aantal gepasseerde artikelen
+//     */
+//    public int aantalArtikelen() {
+//        return kassa.aantalArtikelen();
+//    }
+//
+//    /**
+//     * Deze methode reset de bijgehouden telling van het aantal artikelen en "leegt" de inhoud van
+//     * de kassa.
+//     */
+//    public void resetKassa() {
+//        kassa.resetKassa();
+//    }
+
+
+    public Kassa getKassa() {
+        return kassa;
     }
 
-    /**
-     * Deze methode geeft het aantal gepasseerde artikelen.
-     *
-     * @return het aantal gepasseerde artikelen
-     */
-    public int aantalArtikelen() {
-        return kassa.aantalArtikelen();
+    public KantineAanbod getKantineAanbod() {
+        return kantineAanbod;
     }
 
-    /**
-     * Deze methode reset de bijgehouden telling van het aantal artikelen en "leegt" de inhoud van
-     * de kassa.
-     */
-    public void resetKassa() {
-        kassa.resetKassa();
+    public void setKantineAanbod(KantineAanbod kantineAanbod) {
+        this.kantineAanbod = kantineAanbod;
     }
 }
