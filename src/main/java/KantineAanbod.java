@@ -31,9 +31,11 @@ public class KantineAanbod {
         int startHoeveelheid = startVoorraad.get(productnaam);
         int huidigeHoeveelheid = huidigeVoorraad.size();
         double prijs = prijzen.get(productnaam);
+
         for (int j = huidigeHoeveelheid; j < startHoeveelheid; j++) {
             huidigeVoorraad.add(new Artikel(productnaam, prijs));
         }
+
         aanbod.put(productnaam, huidigeVoorraad);
     }
 
