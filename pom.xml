@@ -26,7 +26,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>KantineSimulatie_1</mainClass>
+                    <mainClass>KantineSimulatie_2</mainClass>
                 </configuration>
             </plugin>
         </plugins>

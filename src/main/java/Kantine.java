@@ -42,6 +42,8 @@ public class Kantine {
 
             dienblad.voegToe(artikel);
         }
+
+        kassarij.sluitAchteraan(dienblad);
     }
 
     /**
