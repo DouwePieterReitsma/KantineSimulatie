@@ -21,6 +21,15 @@ public class KassaRij {
     }
 
     /**
+     * Persoon verlaat de rij
+     *
+     * @param klant
+     */
+    public void verlaatRij(Dienblad klant) {
+        rij.remove(klant);
+    }
+
+    /**
      * Indien er een rij bestaat, de eerste klant uit de rij verwijderen en retourneren. Als er
      * niemand in de rij staat geeft deze null terug.
      *

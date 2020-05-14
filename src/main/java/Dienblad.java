@@ -11,9 +11,12 @@ public class Dienblad {
      */
     public Dienblad() {
         klant = null;
+        artikelen = new ArrayList<>();
     }
 
     public Dienblad(Persoon klant) {
+        this();
+
         this.klant = klant;
     }
 
