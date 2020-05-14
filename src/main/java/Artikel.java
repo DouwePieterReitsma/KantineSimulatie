@@ -9,14 +9,14 @@ import java.math.BigDecimal;
 
 public class Artikel {
     private String naam;
-    private BigDecimal prijs;
+    private double prijs;
 
     public Artikel() {
         this.naam = "undefined";
-        this.prijs = BigDecimal.valueOf(0);
+        this.prijs = 0;
     }
 
-    public Artikel(String naam, BigDecimal prijs) {
+    public Artikel(String naam, double prijs) {
         this.naam = naam;
         this.prijs = prijs;
     }
@@ -29,11 +29,11 @@ public class Artikel {
         this.naam = naam;
     }
 
-    public BigDecimal getPrijs() {
+    public double getPrijs() {
         return prijs;
     }
 
-    public void setPrijs(BigDecimal prijs) {
+    public void setPrijs(double prijs) {
         this.prijs = prijs;
     }
 
@@ -41,7 +41,7 @@ public class Artikel {
     public String toString() {
         return "Artikel{" +
                 "naam='" + getNaam() + '\'' +
-                ", prijs=" + getPrijs().toString() +
+                ", prijs=" + getPrijs() +
                 '}';
     }
 }
