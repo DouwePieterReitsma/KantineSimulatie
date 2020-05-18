@@ -3,12 +3,21 @@ public class Datum {
 	private int maand;
 	private int jaar;
 
+	/**
+	 * Constructor
+	 */
 	public Datum() {
 		dag = 0;
 		maand = 0;
 		jaar = 0;
 	}
 
+	/**
+	 * Constructor
+	 * @param dag
+	 * @param maand
+	 * @param jaar
+	 */
 	public Datum(int dag, int maand, int jaar) {
 		this();
 

@@ -11,11 +11,19 @@ public class Artikel {
     private String naam;
     private double prijs;
 
+    /**
+     * Constructor
+     */
     public Artikel() {
         this.naam = "undefined";
         this.prijs = 0;
     }
 
+    /**
+     * Constructor
+     * @param naam
+     * @param prijs
+     */
     public Artikel(String naam, double prijs) {
         this.naam = naam;
         this.prijs = prijs;

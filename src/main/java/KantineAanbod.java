@@ -26,6 +26,10 @@ public class KantineAanbod {
         }
     }
 
+    /**
+     * Private methode om de voorraad van de kantine aan te vullen
+     * @param productnaam
+     */
     private void vulVoorraadAan(String productnaam) {
         ArrayList<Artikel> huidigeVoorraad = aanbod.get(productnaam);
         int startHoeveelheid = startVoorraad.get(productnaam);

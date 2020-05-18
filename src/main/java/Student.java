@@ -2,10 +2,23 @@ public class Student extends Persoon {
     private int studentnummer;
     private String studierichting;
 
+    /**
+     * Constructor
+     */
     public Student() {
 
     }
 
+    /**
+     * Constructor
+     * @param BSN
+     * @param voornaam
+     * @param achternaam
+     * @param geboorteDatum
+     * @param geslacht
+     * @param studentnummer
+     * @param studierichting
+     */
     public Student(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht, int studentnummer, String studierichting) {
         super(BSN, voornaam, achternaam, geboorteDatum, geslacht);
 

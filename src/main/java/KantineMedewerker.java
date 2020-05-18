@@ -2,10 +2,23 @@ public class KantineMedewerker extends Persoon {
     private int medewerkersnummer;
     private boolean magAchterDeKassaStaan;
 
+    /**
+     * Constructor
+     */
     public KantineMedewerker() {
 
     }
 
+    /**
+     * Constructor
+     * @param BSN
+     * @param voornaam
+     * @param achternaam
+     * @param geboorteDatum
+     * @param geslacht
+     * @param medewerkersnummer
+     * @param magAchterDeKassaStaan
+     */
     public KantineMedewerker(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht, int medewerkersnummer, boolean magAchterDeKassaStaan) {
         super(BSN, voornaam, achternaam, geboorteDatum, geslacht);
         this.medewerkersnummer = medewerkersnummer;

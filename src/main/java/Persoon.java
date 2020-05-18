@@ -5,11 +5,22 @@ public class Persoon {
     private Datum geboorteDatum;
     private char geslacht;
 
+    /**
+     * default constructor
+     */
     public Persoon() {
         this.geboorteDatum = null;
         this.geslacht = 'O';
     }
 
+    /**
+     * Specifieke constructor
+     * @param BSN
+     * @param voornaam
+     * @param achternaam
+     * @param geboorteDatum
+     * @param geslacht
+     */
     public Persoon(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht) {
         this.BSN = BSN;
         this.voornaam = voornaam;
@@ -62,6 +73,10 @@ public class Persoon {
         }
     }
 
+    /**
+     * setter voor geslacht
+     * @param geslacht alleen M en V zijn geldige waarden.
+     */
     public void setGeslacht(char geslacht) {
         // check of geslacht 'M' of 'V' is, als dit niet zo is wordt er de 'O' van onbekend neergezet.
         this.geslacht = (geslacht == 'M' || geslacht == 'V') ? geslacht : 'O';

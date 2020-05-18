@@ -16,6 +16,10 @@ public class Dienblad {
         artikelen = new Stack<>();
     }
 
+    /**
+     * Constructor
+     * @param klant
+     */
     public Dienblad(Persoon klant) {
         this();
 

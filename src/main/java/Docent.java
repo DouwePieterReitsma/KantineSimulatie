@@ -2,10 +2,23 @@ public class Docent extends Persoon {
     private String afkorting;
     private String afdeling;
 
+    /**
+     * Constructor
+     */
     public Docent() {
 
     }
 
+    /**
+     * Constructor
+     * @param BSN
+     * @param voornaam
+     * @param achternaam
+     * @param geboorteDatum
+     * @param geslacht
+     * @param afkorting String van 4 letters
+     * @param afdeling
+     */
     public Docent(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht, String afkorting, String afdeling) {
         super(BSN, voornaam, achternaam, geboorteDatum, geslacht);
         this.afkorting = afkorting;
