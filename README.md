@@ -34,3 +34,6 @@ Vraag 2g: final zorgt er voor dat de variabele niet meer kan worden aangepast na
 Vraag 2h: De compiler vind dit niet leuk omdat je een instantievariabele van een klasse probeert aan te roepen terwijl deze klasse niet geïnitialiseerd is.
 
 Vraag 2i: De variabele kan nu worden aangepast wat niet de bedoeling is aangezien het ter vervanging van een magic constant was geïntroduceerd.
+
+Vraag 3b: super moet altijd bovenaan staan in een constructor omdat je een super-klasse altijd moet initialiseren voordat je de niet-statische methodes kunt gebruiken.
+

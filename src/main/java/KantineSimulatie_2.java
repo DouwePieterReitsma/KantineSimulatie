@@ -2,6 +2,9 @@ import java.util.*;
 
 public class KantineSimulatie_2 {
     private static final int DAGEN = 7;
+    private static final int AANTAL_STUDENTEN = 89;
+    private static final int AANTAL_DOCENTEN = 10;
+    private static final int AANTAL_KANTINEMEDEWERKERS = 1;
 
     // kantine
     private Kantine kantine;
@@ -96,33 +99,114 @@ public class KantineSimulatie_2 {
         return artikelen;
     }
 
+//    /**
+//     * Week 2 versie
+//     * Deze methode simuleert een aantal dagen
+//     * in het verloop van de kantine
+//     *
+//     * @param dagen
+//     */
+//    public void simuleer(int dagen) {
+//        // for lus voor dagen
+//        for(int i = 0; i < dagen; i++) {
+//
+//            // bedenk hoeveel personen vandaag binnen lopen
+//            int aantalpersonen = getRandomValue(MIN_PERSONEN_PER_DAG, MAX_PERSONEN_PER_DAG);
+//
+//            // laat de personen maar komen...
+//            for (int j = 0; j < aantalpersonen; j++) {
+//
+//                // maak persoon en dienblad aan, koppel ze
+//                // en bedenk hoeveel artikelen worden gepakt
+//                Persoon persoon = new Persoon();
+//                Dienblad dienblad = new Dienblad(persoon);
+//
+//                int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
+//
+//                // genereer de "artikelnummers", dit zijn indexen
+//                // van de artikelnamen array
+//                int[] tepakken = getRandomArray(
+//                    aantalartikelen, 0, AANTAL_ARTIKELEN-1);
+//
+//                // vind de artikelnamen op basis van
+//                // de indexen hierboven
+//                String[] artikelen = geefArtikelNamen(tepakken);
+//
+//                // loop de kantine binnen, pak de gewenste
+//                // artikelen, sluit aan
+//
+//                kantine.loopPakSluitAan(dienblad, artikelen);
+//
+//            }
+//
+//            // verwerk rij voor de kassa
+//            kantine.verwerkRijVoorKassa();
+//
+//            // druk de dagtotalen af en hoeveel personen binnen zijn gekomen
+//            System.out.println("Dag " + (i+1));
+//            System.out.println("Aantal personen: " + aantalpersonen);
+//            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen());
+//            System.out.println("Hoeveelheid geld: " + kantine.getKassa().hoeveelheidGeldInKassa());
+//
+//            // reset de kassa voor de volgende dag
+//            kantine.getKassa().resetKassa();
+//        }
+//    }
+
     /**
+     * Week 3 versie
      * Deze methode simuleert een aantal dagen
      * in het verloop van de kantine
      *
      * @param dagen
      */
     public void simuleer(int dagen) {
+        int[] verkochteArtikelenPerDag = new int[dagen];
+        double[] omzetPerDag = new double[dagen];
+
         // for lus voor dagen
         for(int i = 0; i < dagen; i++) {
+            ArrayList<Persoon> klanten = new ArrayList<>();
 
-            // bedenk hoeveel personen vandaag binnen lopen
-            int aantalpersonen = getRandomValue(MIN_PERSONEN_PER_DAG, MAX_PERSONEN_PER_DAG);
+            int aantalPersonen = getRandomValue(MIN_PERSONEN_PER_DAG, MAX_PERSONEN_PER_DAG);
+
+//            for(int j = 0; j < AANTAL_STUDENTEN; j++) {
+//                klanten.add(new Student());
+//            }
+//
+//            for(int j = 0; j < AANTAL_DOCENTEN; j++) {
+//                klanten.add(new Docent());
+//            }
+//
+//            for(int j = 0; j < AANTAL_KANTINEMEDEWERKERS; j++) {
+//                klanten.add(new KantineMedewerker());
+//            }
+
+            for(int j = 0; j < aantalPersonen; j++) {
+                int r = getRandomValue(1, AANTAL_STUDENTEN + AANTAL_STUDENTEN + AANTAL_DOCENTEN);
+
+                if (r <= AANTAL_KANTINEMEDEWERKERS) {
+                    klanten.add(new KantineMedewerker());
+                } else if(r <= AANTAL_STUDENTEN + AANTAL_KANTINEMEDEWERKERS) {
+                    klanten.add(new Student());
+                } else if(r <= AANTAL_DOCENTEN + AANTAL_STUDENTEN + AANTAL_KANTINEMEDEWERKERS) {
+                    klanten.add(new Docent());
+                }
+            }
 
             // laat de personen maar komen...
-            for (int j = 0; j < aantalpersonen; j++) {
+            for (Persoon klant : klanten) {
+                // maak een dienblad aan voor de klant
+                Dienblad dienblad = new Dienblad(klant);
 
-                // maak persoon en dienblad aan, koppel ze
-                // en bedenk hoeveel artikelen worden gepakt
-                Persoon persoon = new Persoon();
-                Dienblad dienblad = new Dienblad(persoon);
+                System.out.println(klant.toString());
 
                 int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
 
                 // genereer de "artikelnummers", dit zijn indexen
                 // van de artikelnamen array
                 int[] tepakken = getRandomArray(
-                    aantalartikelen, 0, AANTAL_ARTIKELEN-1);
+                        aantalartikelen, 0, AANTAL_ARTIKELEN-1);
 
                 // vind de artikelnamen op basis van
                 // de indexen hierboven
@@ -138,15 +222,35 @@ public class KantineSimulatie_2 {
             // verwerk rij voor de kassa
             kantine.verwerkRijVoorKassa();
 
+            verkochteArtikelenPerDag[i] = kantine.getKassa().aantalArtikelen();
+            omzetPerDag[i] = kantine.getKassa().hoeveelheidGeldInKassa();
+
+
             // druk de dagtotalen af en hoeveel personen binnen zijn gekomen
             System.out.println("Dag " + (i+1));
-            System.out.println("Aantal personen: " + aantalpersonen);
-            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen());
-            System.out.println("Hoeveelheid geld: " + kantine.getKassa().hoeveelheidGeldInKassa());
+            System.out.println("Aantal personen: " + klanten.size());
+            System.out.println("Aantal artikelen: " + verkochteArtikelenPerDag[i]);
+            System.out.println("Hoeveelheid geld: " + omzetPerDag[i]);
 
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
         }
+
+        double[] dagTotalen = Administratie.berekenDagOmzet(omzetPerDag);
+
+        System.out.println("Simulatie afgelopen");
+        System.out.println("----------------------------------");
+        System.out.println("Totale omzet op maandagen: " + dagTotalen[0]);
+        System.out.println("Totale omzet op dinsdagen: " + dagTotalen[1]);
+        System.out.println("Totale omzet op woensdagen: " + dagTotalen[2]);
+        System.out.println("Totale omzet op donderdagen: " + dagTotalen[3]);
+        System.out.println("Totale omzet op vrijdagen: " + dagTotalen[4]);
+        System.out.println("Totale omzet op zaterdagen: " + dagTotalen[5]);
+        System.out.println("Totale omzet op zondagen: " + dagTotalen[6]);
+        System.out.println("----------------------------------");
+        System.out.println("Gemiddeld aantal verkochte artikelen: " + Administratie.berekenGemiddeldAantal(verkochteArtikelenPerDag));
+        System.out.println("Gemiddelde omzet: " + Administratie.berekenGemiddeldeOmzet(omzetPerDag));
+
     }
 
     /**
