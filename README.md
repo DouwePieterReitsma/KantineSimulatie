@@ -37,3 +37,8 @@ Vraag 2i: De variabele kan nu worden aangepast wat niet de bedoeling is aangezie
 
 Vraag 3b: super moet altijd bovenaan staan in een constructor omdat je een super-klasse altijd moet initialiseren voordat je de niet-statische methodes kunt gebruiken.
 
+## Week 4
+Vraag 1b: ![Sequentiediagram](/afbeeldingen/week4opdracht1b.png)
+
+Vraag 1c: De instantievariabele saldo is protected gemaakt omdat je deze dan kunt gebruiken in de subklasses, maar niet kunt veranderen buiten de scope van de klasse om zoals bij een public variabele.
+
