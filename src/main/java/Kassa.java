@@ -22,16 +22,54 @@ public class Kassa {
      * @param klant die moet afrekenen
      */
     public void rekenAf(Dienblad klant) {
-//        artikelen += klant.getAantalArtikelen();
-//        geld += klant.getTotaalPrijs();
+        Persoon persoon = klant.getKlant();
+        int artikelenOpDienblad = 0;
+        double totaalPrijs = 0;
+        double korting = 0;
+        boolean heeftMaximum = false;
+        double maxKorting = 0;
 
         Iterator<Artikel> iterator = klant.getArtikelenIterator();
 
         while(iterator.hasNext()) {
             Artikel artikel = iterator.next();
 
-            artikelen++;
-            geld += artikel.getPrijs();
+            artikelenOpDienblad++;
+            totaalPrijs += artikel.getPrijs();
+        }
+
+        if (persoon instanceof Docent) {
+            Docent docent = (Docent)persoon;
+
+            korting = docent.geefKortingsPercentage();
+            heeftMaximum = docent.heeftMaximum();
+            maxKorting = docent.geefMaximum();
+
+        } else if(persoon instanceof KantineMedewerker) {
+            KantineMedewerker kantineMedewerker = (KantineMedewerker)persoon;
+
+            korting = kantineMedewerker.geefKortingsPercentage();
+            heeftMaximum = kantineMedewerker.heeftMaximum();
+            maxKorting = kantineMedewerker.geefMaximum();
+        }
+
+        double teBetalen = totaalPrijs * (1 - korting);
+
+        if (heeftMaximum) {
+            if (totaalPrijs - teBetalen > maxKorting) {
+                teBetalen = totaalPrijs - maxKorting;
+            }
+        }
+
+        try{
+            persoon.getBetaalwijze().betaal(teBetalen);
+
+            this.artikelen += artikelenOpDienblad;
+            this.geld += teBetalen;
+
+        } catch(TeWeinigGeldException e) {
+            System.out.println("Betaling mislukt voor persoon: " + persoon.toString());
+            System.out.println("Reden: " + e.getMessage());
         }
 
         kassaRij.verlaatRij(klant);

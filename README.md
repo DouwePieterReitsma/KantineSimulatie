@@ -42,3 +42,68 @@ Vraag 1b: ![Sequentiediagram](/afbeeldingen/week4opdracht1b.png)
 
 Vraag 1c: De instantievariabele saldo is protected gemaakt omdat je deze dan kunt gebruiken in de subklasses, maar niet kunt veranderen buiten de scope van de klasse om zoals bij een public variabele.
 
+Vraag 3a: Nee dit kan niet omdat een interface alleen ongeïmplementeerde methodes bevat die geïmplementeerd moeten worden in een subklasse om te kunnen worden gebruikt.
+
+Vraag 3b: Hetzelfde antwoord als hierboven, maar met als opmerking dat een abstracte klasse ook niet-abstracte methodes kan bevatten.
+
+Vraag 3c: In java is multiple inheritance niet mogelijk omdat dit conflicten kan veroorzaken als er gelijknamige methodes zijn in meerdere klassen.
+
+Vraag 3d: Een klasse kan meerdere interfaces implementeren, maar de compiler zal een foutmelding laten zien als er in twee of meerdere interfaces een methode is met één dezelfde naam en verschillende return types.
+
+Vraag 3e: Ja, dat kan.
+
+Vraag 3f: Elke methode in een interface is per definitie abstract, omdat een interface zelf geen methodes kan implementeren.
+
+Vraag 3g: Ja, elke klasse met een abstracte functie moet als ```abstract``` worden gemarkeerd, omdat deze ongeïmplementeerde methodes bevat.
+
+Vraag 3h: Het begrip polymorfisme houd in dat de interface van klassen gelijkvormig zijn, maar verschillende implementaties kunnen hebben.
+
+Voorbeeld met abstracte klasses:
+
+    public abstract Medewerker {
+        public double bonus() { return 2000; }
+    
+        public abstract double getLoon();
+
+    }
+    
+    public class Docent extends Medewerker {
+        public double getLoon() { return 42 + bonus(); }
+    }
+    
+    public class Directeur extends Medewerker {
+        public double getLoon() { return 9001 + bonus(); }
+    }
+    
+Voorbeeld met interfaces:
+
+    public interface Medewerker {
+        double getLoon();
+    }
+    
+    public class Docent implements Medewerker {
+        double getLoon() { return 42; }
+    }
+    
+    public class Directeur implements Medewerker {
+        double getLoon() { return 9001; }
+    }
+
+Vraag 4a: Dat kan en dat is logisch omdat een abstracte klasse, abstracte en niet-abstracte methodes kan bevatten, maar tegelijkertijd niet de eis stelt dat er minimaal één abstracte methode hoort te zijn.
+
+Vraag 4b: Ja dat moet altijd tenzij de subklasse zelf als abstract wordt gedeclareerd.
+
+Vraag 4c: Je kunt in de interface een default methode definiëren die aangeroepen wordt indien de desbetreffende methode niet geïmplementeerd is in de subklasse.
+
+Voorbeeld:
+
+    public interface Test {
+        default String getText() { return "Hello World!"; }
+    }     
+    
+Vraag 4d: Dat kan niet, omdat polymorfisme sowieso niet mogelijk is met klasse-variabelen.
+
+Vraag 4e: Een ```final```-methode is de allerlaatste implementatie van een methode. Nadat een methode als ```final``` is gedeclareerd, kan deze niet meer worden overschreven. Hierdoor is het logisch dat een methode niet zowel ```final``` als ```abstract``` kan zijn.
+
+Vraag 5a
+   

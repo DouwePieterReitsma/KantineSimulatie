@@ -15,15 +15,13 @@ public class Pinpas extends Betaalwijze {
     /**
      * Methode om betaling af te handelen
      */
-    public boolean betaal(double tebetalen) {
-        if (tebetalen > kredietlimiet) return false; // je mag niet meer dan het kredietlimiet betalen
+    public void betaal(double tebetalen) throws TeWeinigGeldException{
+        if (tebetalen > kredietlimiet) throw new TeWeinigGeldException("Bedrag zit over kredietlimiet heen"); // je mag niet meer dan het kredietlimiet betalen
 
         double nieuwSaldo = saldo - tebetalen;
 
-        if (nieuwSaldo < 0) return false;
+        if (nieuwSaldo < 0) throw new TeWeinigGeldException("Te weinig saldo");
 
         setSaldo(nieuwSaldo);
-
-        return true;
     }
 }

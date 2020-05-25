@@ -5,6 +5,8 @@ public class Persoon {
     private Datum geboorteDatum;
     private char geslacht;
 
+    private Betaalwijze betaalwijze;
+
     /**
      * default constructor
      */
@@ -80,6 +82,14 @@ public class Persoon {
     public void setGeslacht(char geslacht) {
         // check of geslacht 'M' of 'V' is, als dit niet zo is wordt er de 'O' van onbekend neergezet.
         this.geslacht = (geslacht == 'M' || geslacht == 'V') ? geslacht : 'O';
+    }
+
+    public Betaalwijze getBetaalwijze() {
+        return betaalwijze;
+    }
+
+    public void setBetaalwijze(Betaalwijze betaalwijze) {
+        this.betaalwijze = betaalwijze;
     }
 
     @Override

@@ -199,6 +199,12 @@ public class KantineSimulatie_2 {
                 // maak een dienblad aan voor de klant
                 Dienblad dienblad = new Dienblad(klant);
 
+                Pinpas pinpas = new Pinpas();
+                pinpas.setSaldo(1000);
+                pinpas.setKredietLimiet(500);
+
+                klant.setBetaalwijze(pinpas);
+
                 System.out.println(klant.toString());
 
                 int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
