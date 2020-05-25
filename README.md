@@ -106,4 +106,28 @@ Vraag 4d: Dat kan niet, omdat polymorfisme sowieso niet mogelijk is met klasse-v
 Vraag 4e: Een ```final```-methode is de allerlaatste implementatie van een methode. Nadat een methode als ```final``` is gedeclareerd, kan deze niet meer worden overschreven. Hierdoor is het logisch dat een methode niet zowel ```final``` als ```abstract``` kan zijn.
 
 Vraag 5a
-   
+
+## Week 5
+1d: 
+* ```@Id``` geeft aan dat de klasse-variabele correspondeert aan de unique identifier in de database.
+* ```@GeneratedValue``` geeft aan dat de waarde van de variabele automatisch wordt gegenereerd. Bijvoorbeeld door autoincrementing.
+* ```@Column``` specificeert aan welke kolom in de database de variabele correspondeert.
+
+1e: student, student_telefoon, studie en telefoon
+
+2a: omdat een student meerdere telefoons kan bezitten.
+
+2b: 
+* Bij ```telefoons``` wordt er een nieuwe koppeltabel gegenereerd in de database.
+* Bij ```studies``` wordt er simpelweg voor elke student die ingeschreven staat bij een studie een record gegenereerd met daarin de studie en de ```student_id```.
+    * Er is gekozen om ```@JoinTable``` niet te gebruiken hiervoor omdat dit voor een ...
+    
+2c: In de database wordt deze relatie gerepresenteerd door een enkele tabel genaamd ```studie``` met daarin de studienaam en de ```student_id```
+
+2d: De velden van```kaartNummer``` en ```vervalDatum``` van ```StudentKaart``` zijn in de database toegevoegd (embedded) aan de student-tabel.
+
+Met ```@Embedded``` kun je de velden van een ```@Embeddable``` toevoegen aan de tabel van de klasse.
+
+3a: Je zou in het geval van onvoldoende saldo het hele koopproces terug kunnen draaien.
+
+4a: 
