@@ -25,9 +25,24 @@ public class Kassa {
         Persoon persoon = klant.getKlant();
         int artikelenOpDienblad = 0;
         double totaalPrijs = 0;
-        double korting = 0;
+        double medewerkerskorting = 0;
         boolean heeftMaximum = false;
         double maxKorting = 0;
+
+        if (persoon instanceof Docent) {
+            Docent docent = (Docent)persoon;
+
+            medewerkerskorting = docent.geefKortingsPercentage();
+            heeftMaximum = docent.heeftMaximum();
+            maxKorting = docent.geefMaximum();
+
+        } else if(persoon instanceof KantineMedewerker) {
+            KantineMedewerker kantineMedewerker = (KantineMedewerker)persoon;
+
+            medewerkerskorting = kantineMedewerker.geefKortingsPercentage();
+            heeftMaximum = kantineMedewerker.heeftMaximum();
+            maxKorting = kantineMedewerker.geefMaximum();
+        }
 
         Iterator<Artikel> iterator = klant.getArtikelenIterator();
 
@@ -35,37 +50,34 @@ public class Kassa {
             Artikel artikel = iterator.next();
 
             artikelenOpDienblad++;
-            totaalPrijs += artikel.getPrijs();
-        }
 
-        if (persoon instanceof Docent) {
-            Docent docent = (Docent)persoon;
+            double prijs = artikel.getPrijs();
+            double teBetalen = 0;
+            double korting = artikel.getKorting();
 
-            korting = docent.geefKortingsPercentage();
-            heeftMaximum = docent.heeftMaximum();
-            maxKorting = docent.geefMaximum();
+            // als het artikel in de aanbieding is geld de medewerkerskorting niet.
+            if (korting > 0) {
+                teBetalen = prijs - korting;
+            } else {
+                korting = 1 - medewerkerskorting;
 
-        } else if(persoon instanceof KantineMedewerker) {
-            KantineMedewerker kantineMedewerker = (KantineMedewerker)persoon;
+                teBetalen = prijs * korting;
 
-            korting = kantineMedewerker.geefKortingsPercentage();
-            heeftMaximum = kantineMedewerker.heeftMaximum();
-            maxKorting = kantineMedewerker.geefMaximum();
-        }
-
-        double teBetalen = totaalPrijs * (1 - korting);
-
-        if (heeftMaximum) {
-            if (totaalPrijs - teBetalen > maxKorting) {
-                teBetalen = totaalPrijs - maxKorting;
+                if (heeftMaximum) {
+                    if (prijs - teBetalen > maxKorting) {
+                        teBetalen = prijs - maxKorting;
+                    }
+                }
             }
+
+            totaalPrijs += teBetalen;
         }
 
         try{
-            persoon.getBetaalwijze().betaal(teBetalen);
+            persoon.getBetaalwijze().betaal(totaalPrijs);
 
             this.artikelen += artikelenOpDienblad;
-            this.geld += teBetalen;
+            this.geld += totaalPrijs;
 
         } catch(TeWeinigGeldException e) {
             System.out.println("Betaling mislukt voor persoon: " + persoon.toString());

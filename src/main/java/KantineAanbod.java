@@ -15,11 +15,23 @@ public class KantineAanbod {
         aanbod = new HashMap<String, ArrayList<Artikel>>();
         startVoorraad = new HashMap<String, Integer>();
         prijzen = new HashMap<String, Double>();
+
+        Random random = new Random();
+
         for (int i = 0; i < artikelnaam.length; i++) {
             ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
+
             for (int j = 0; j < hoeveelheid[i]; j++) {
-                artikelen.add(new Artikel(artikelnaam[i], prijs[i]));
+                int r = random.nextInt(11);
+
+                // er moet tenminste 1 artikel in de aanbieding zijn.
+                if (r == 10 || i == 0) {
+                    artikelen.add(new Artikel(artikelnaam[i], prijs[i], prijs[i] * 0.2));
+                } else {
+                    artikelen.add(new Artikel(artikelnaam[i], prijs[i]));
+                }
             }
+
             startVoorraad.put(artikelnaam[i], hoeveelheid[i]);
             prijzen.put(artikelnaam[i], prijs[i]);
             aanbod.put(artikelnaam[i], artikelen);
@@ -74,7 +86,7 @@ public class KantineAanbod {
      * Publieke methode om een artikel via naam van de stapel te pakken. Retouneert null als artikel
      * niet bestaat of niet op voorraad is.
      *
-     * @param naam (van artikel)
+     * @param productnaam (van artikel)
      * @return artikel (of null)
      */
     public Artikel getArtikel(String productnaam) {

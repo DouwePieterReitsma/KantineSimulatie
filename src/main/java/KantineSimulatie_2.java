@@ -1,5 +1,10 @@
 import java.util.*;
 
+import javax.persistence.Entity;
+import javax.persistence.Persistence;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 public class KantineSimulatie_2 {
     private static final int DAGEN = 7;
     private static final int AANTAL_STUDENTEN = 89;
@@ -38,6 +43,11 @@ public class KantineSimulatie_2 {
     // minimum en maximum artikelen per persoon
     private static final int MIN_ARTIKELEN_PER_PERSOON = 1;
     private static final int MAX_ARTIKELEN_PER_PERSOON = 4;
+
+    // JPA
+    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("KantineSimulatie");
+
+    private EntityManager manager;
 
     /**
      * Constructor
@@ -99,60 +109,6 @@ public class KantineSimulatie_2 {
         return artikelen;
     }
 
-//    /**
-//     * Week 2 versie
-//     * Deze methode simuleert een aantal dagen
-//     * in het verloop van de kantine
-//     *
-//     * @param dagen
-//     */
-//    public void simuleer(int dagen) {
-//        // for lus voor dagen
-//        for(int i = 0; i < dagen; i++) {
-//
-//            // bedenk hoeveel personen vandaag binnen lopen
-//            int aantalpersonen = getRandomValue(MIN_PERSONEN_PER_DAG, MAX_PERSONEN_PER_DAG);
-//
-//            // laat de personen maar komen...
-//            for (int j = 0; j < aantalpersonen; j++) {
-//
-//                // maak persoon en dienblad aan, koppel ze
-//                // en bedenk hoeveel artikelen worden gepakt
-//                Persoon persoon = new Persoon();
-//                Dienblad dienblad = new Dienblad(persoon);
-//
-//                int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
-//
-//                // genereer de "artikelnummers", dit zijn indexen
-//                // van de artikelnamen array
-//                int[] tepakken = getRandomArray(
-//                    aantalartikelen, 0, AANTAL_ARTIKELEN-1);
-//
-//                // vind de artikelnamen op basis van
-//                // de indexen hierboven
-//                String[] artikelen = geefArtikelNamen(tepakken);
-//
-//                // loop de kantine binnen, pak de gewenste
-//                // artikelen, sluit aan
-//
-//                kantine.loopPakSluitAan(dienblad, artikelen);
-//
-//            }
-//
-//            // verwerk rij voor de kassa
-//            kantine.verwerkRijVoorKassa();
-//
-//            // druk de dagtotalen af en hoeveel personen binnen zijn gekomen
-//            System.out.println("Dag " + (i+1));
-//            System.out.println("Aantal personen: " + aantalpersonen);
-//            System.out.println("Aantal artikelen: " + kantine.getKassa().aantalArtikelen());
-//            System.out.println("Hoeveelheid geld: " + kantine.getKassa().hoeveelheidGeldInKassa());
-//
-//            // reset de kassa voor de volgende dag
-//            kantine.getKassa().resetKassa();
-//        }
-//    }
-
     /**
      * Week 3 versie
      * Deze methode simuleert een aantal dagen
@@ -161,6 +117,8 @@ public class KantineSimulatie_2 {
      * @param dagen
      */
     public void simuleer(int dagen) {
+        manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+
         int[] verkochteArtikelenPerDag = new int[dagen];
         double[] omzetPerDag = new double[dagen];
 
@@ -169,18 +127,6 @@ public class KantineSimulatie_2 {
             ArrayList<Persoon> klanten = new ArrayList<>();
 
             int aantalPersonen = getRandomValue(MIN_PERSONEN_PER_DAG, MAX_PERSONEN_PER_DAG);
-
-//            for(int j = 0; j < AANTAL_STUDENTEN; j++) {
-//                klanten.add(new Student());
-//            }
-//
-//            for(int j = 0; j < AANTAL_DOCENTEN; j++) {
-//                klanten.add(new Docent());
-//            }
-//
-//            for(int j = 0; j < AANTAL_KANTINEMEDEWERKERS; j++) {
-//                klanten.add(new KantineMedewerker());
-//            }
 
             for(int j = 0; j < aantalPersonen; j++) {
                 int r = getRandomValue(1, AANTAL_STUDENTEN + AANTAL_STUDENTEN + AANTAL_DOCENTEN);
@@ -257,6 +203,8 @@ public class KantineSimulatie_2 {
         System.out.println("Gemiddeld aantal verkochte artikelen: " + Administratie.berekenGemiddeldAantal(verkochteArtikelenPerDag));
         System.out.println("Gemiddelde omzet: " + Administratie.berekenGemiddeldeOmzet(omzetPerDag));
 
+        manager.close();
+        ENTITY_MANAGER_FACTORY.close();
     }
 
     /**

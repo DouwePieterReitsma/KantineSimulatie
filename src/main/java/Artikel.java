@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class Artikel {
     private String naam;
     private double prijs;
+    private double korting;
 
     /**
      * Constructor
@@ -17,6 +18,7 @@ public class Artikel {
     public Artikel() {
         this.naam = "undefined";
         this.prijs = 0;
+        this.korting = 0;
     }
 
     /**
@@ -27,6 +29,13 @@ public class Artikel {
     public Artikel(String naam, double prijs) {
         this.naam = naam;
         this.prijs = prijs;
+        this.korting = 0;
+    }
+
+    public Artikel(String naam, double prijs, double korting) {
+        this.naam = naam;
+        this.prijs = prijs;
+        this.korting = korting;
     }
 
     public String getNaam() {
@@ -43,6 +52,14 @@ public class Artikel {
 
     public void setPrijs(double prijs) {
         this.prijs = prijs;
+    }
+
+    public double getKorting() {
+        return korting;
+    }
+
+    public void setKorting(double korting) {
+        this.korting = korting;
     }
 
     @Override
