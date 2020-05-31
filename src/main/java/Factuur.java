@@ -2,13 +2,22 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Iterator;
 
-public class Factuur implements Serializable {
-    private Long ID;
+import javax.persistence.*;
 
+@Entity
+@Table(name= "factuur")
+public class Factuur implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "datum")
     private LocalDate datum;
 
+    @Column(name = "korting")
     private double korting;
 
+    @Column(name = "totaal")
     private double totaal;
 
     public Factuur() {
@@ -103,7 +112,7 @@ public class Factuur implements Serializable {
      * @return een printbaar bonnetje
      */
     public String toString() {
-        return "Factuur #" + ID + ":\r\nDatum: " + datum + "\r\nKorting: " + getKorting() + "\r\nTotaal: " + getTotaal();
+        return "Factuur #" + id + ":\r\nDatum: " + datum + "\r\nKorting: " + getKorting() + "\r\nTotaal: " + getTotaal();
     }
 
 }

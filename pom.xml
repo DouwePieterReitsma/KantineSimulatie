@@ -27,7 +27,7 @@
                 <version>1.6.0</version>
                 <configuration>
                     <mainClass>KantineSimulatie_2</mainClass>
-                    <arguments>100</arguments>
+                    <arguments>20</arguments>
                 </configuration>
             </plugin>
             <plugin>

@@ -54,10 +54,11 @@ public class KantineSimulatie_2 {
      *
      */
     public KantineSimulatie_2() {
-        kantine = new Kantine();
+        manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+        kantine = new Kantine(manager);
+
         random = new Random();
-        int[] hoeveelheden =
-                getRandomArray(AANTAL_ARTIKELEN, MIN_ARTIKELEN_PER_SOORT, MAX_ARTIKELEN_PER_SOORT);
+        int[] hoeveelheden = getRandomArray(AANTAL_ARTIKELEN, MIN_ARTIKELEN_PER_SOORT, MAX_ARTIKELEN_PER_SOORT);
         kantineaanbod = new KantineAanbod(artikelnamen, artikelprijzen, hoeveelheden);
 
         kantine.setKantineAanbod(kantineaanbod);
@@ -117,8 +118,6 @@ public class KantineSimulatie_2 {
      * @param dagen
      */
     public void simuleer(int dagen) {
-        manager = ENTITY_MANAGER_FACTORY.createEntityManager();
-
         int[] verkochteArtikelenPerDag = new int[dagen];
         double[] omzetPerDag = new double[dagen];
 
