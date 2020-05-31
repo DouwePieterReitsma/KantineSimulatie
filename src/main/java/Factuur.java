@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Iterator;
 
 public class Factuur implements Serializable {
     private Long ID;
@@ -31,7 +32,57 @@ public class Factuur implements Serializable {
      * @param klant
      */
     private void verwerkBestelling(Dienblad klant) {
-        // method body omitted
+        Persoon persoon = klant.getKlant();
+        double medewerkerskorting = 0;
+        boolean heeftMaximum = false;
+        double maxKorting = 0;
+        double totaalZonderKorting = 0;
+
+        if (persoon instanceof Docent) {
+            Docent docent = (Docent)persoon;
+
+            medewerkerskorting = docent.geefKortingsPercentage();
+            heeftMaximum = docent.heeftMaximum();
+            maxKorting = docent.geefMaximum();
+
+        } else if(persoon instanceof KantineMedewerker) {
+            KantineMedewerker kantineMedewerker = (KantineMedewerker)persoon;
+
+            medewerkerskorting = kantineMedewerker.geefKortingsPercentage();
+            heeftMaximum = kantineMedewerker.heeftMaximum();
+            maxKorting = kantineMedewerker.geefMaximum();
+        }
+
+        Iterator<Artikel> iterator = klant.getArtikelenIterator();
+
+        while(iterator.hasNext()) {
+            Artikel artikel = iterator.next();
+
+            double artikelPrijs = artikel.getPrijs();
+            double teBetalen = 0;
+            double artikelKorting = artikel.getKorting();
+
+            // als het artikel in de aanbieding is geld de medewerkerskorting niet.
+            if (artikelKorting > 0) {
+                teBetalen = artikelPrijs - artikelKorting;
+            } else {
+                artikelKorting = 1 - medewerkerskorting;
+
+                teBetalen = artikelPrijs * artikelKorting;
+
+                if (heeftMaximum) {
+                    if (artikelPrijs - teBetalen > maxKorting) {
+                        teBetalen = artikelPrijs - maxKorting;
+                    }
+                }
+            }
+
+            totaal += teBetalen;
+            totaalZonderKorting += artikelPrijs;
+
+        }
+
+        korting = totaalZonderKorting - totaal;
     }
 
     /*
@@ -42,7 +93,7 @@ public class Factuur implements Serializable {
     }
 
     /**
-     * @return de toegepaste korting
+     * @return de toegepaste korting als een getal (geen percentage)
      */
     public double getKorting() {
         return korting;
@@ -52,7 +103,7 @@ public class Factuur implements Serializable {
      * @return een printbaar bonnetje
      */
     public String toString() {
-        // method body omitted
+        return "Factuur #" + ID + ":\r\nDatum: " + datum + "\r\nKorting: " + getKorting() + "\r\nTotaal: " + getTotaal();
     }
 
 }

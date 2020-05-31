@@ -70,5 +70,9 @@ public class Dienblad {
     public void setKlant(Persoon klant) {
         this.klant = klant;
     }
+
+    public int aantalArtikelen() {
+        return artikelen.size();
+    }
 }
 
