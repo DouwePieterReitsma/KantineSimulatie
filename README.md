@@ -130,3 +130,9 @@ Met ```@Embedded``` kun je de velden van een ```@Embeddable``` toevoegen aan de 
 
 ## Week 6
 
+4a: many-to-one, de annotatie hiervoor is: ```@ManyToOne```
+
+4b: one-to-many, de annotatie hiervoor is ```@OneToMany```
+
+
+

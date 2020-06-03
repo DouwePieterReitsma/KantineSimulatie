@@ -1,11 +1,8 @@
 import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Persistence;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.*;
 
-public class KantineSimulatie_2 {
+public class KantineSimulatie {
     private static final int DAGEN = 7;
     private static final int AANTAL_STUDENTEN = 89;
     private static final int AANTAL_DOCENTEN = 10;
@@ -53,8 +50,9 @@ public class KantineSimulatie_2 {
      * Constructor
      *
      */
-    public KantineSimulatie_2() {
+    public KantineSimulatie() {
         manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+
         kantine = new Kantine(manager);
 
         random = new Random();
@@ -110,6 +108,53 @@ public class KantineSimulatie_2 {
         return artikelen;
     }
 
+    private void printTotaleOmzetEnKorting() {
+        try {
+            Query query = manager.createNativeQuery("SELECT SUM(totaal), SUM(korting) FROM factuur;");
+
+            Object[] result = (Object[]) query.getSingleResult();
+
+            System.out.println("Totale omzet: " + result[0]);
+            System.out.println("Totaal gegeven korting: " + result[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printGemiddeldeOmzetEnKortingPerFactuur() {
+        try {
+            Query query = manager.createNativeQuery("SELECT AVG(totaal), AVG(korting) FROM factuur;");
+
+            Object[] result = (Object[]) query.getSingleResult();
+
+            System.out.println("Gemiddelde omzet per factuur: " + result[0]);
+            System.out.println("Gemiddeld gegeven korting per factuur: " + result[1]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printTop3Facturen() {
+        try {
+            Query query = manager.createNativeQuery("SELECT * FROM factuur ORDER BY totaal DESC LIMIT 3", Factuur.class);
+
+            List<Factuur> top3 = query.getResultList();
+
+            int i = 1;
+
+            System.out.println("Top 3 facturen:");
+            System.out.println();
+
+            for(Factuur factuur : top3) {
+                System.out.println(i++ + ": " + factuur.toString());
+                System.out.println();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Week 3 versie
      * Deze methode simuleert een aantal dagen
@@ -150,7 +195,7 @@ public class KantineSimulatie_2 {
 
                 klant.setBetaalwijze(pinpas);
 
-                System.out.println(klant.toString());
+                //System.out.println(klant.toString());
 
                 int aantalartikelen = getRandomValue(MIN_ARTIKELEN_PER_PERSOON, MAX_ARTIKELEN_PER_PERSOON);
 
@@ -182,6 +227,7 @@ public class KantineSimulatie_2 {
             System.out.println("Aantal personen: " + klanten.size());
             System.out.println("Aantal artikelen: " + verkochteArtikelenPerDag[i]);
             System.out.println("Hoeveelheid geld: " + omzetPerDag[i]);
+            System.out.println();
 
             // reset de kassa voor de volgende dag
             kantine.getKassa().resetKassa();
@@ -198,9 +244,15 @@ public class KantineSimulatie_2 {
         System.out.println("Totale omzet op vrijdagen: " + dagTotalen[4]);
         System.out.println("Totale omzet op zaterdagen: " + dagTotalen[5]);
         System.out.println("Totale omzet op zondagen: " + dagTotalen[6]);
+
         System.out.println("----------------------------------");
+        printTotaleOmzetEnKorting();
         System.out.println("Gemiddeld aantal verkochte artikelen: " + Administratie.berekenGemiddeldAantal(verkochteArtikelenPerDag));
-        System.out.println("Gemiddelde omzet: " + Administratie.berekenGemiddeldeOmzet(omzetPerDag));
+        //System.out.println("Gemiddelde omzet: " + Administratie.berekenGemiddeldeOmzet(omzetPerDag));
+        printGemiddeldeOmzetEnKortingPerFactuur();
+
+        System.out.println("----------------------------------");
+        printTop3Facturen();
 
         manager.close();
         ENTITY_MANAGER_FACTORY.close();
@@ -218,7 +270,7 @@ public class KantineSimulatie_2 {
             dagen = Integer.parseInt(args[0]);
         }
 
-        KantineSimulatie_2 simulatie = new KantineSimulatie_2();
+        KantineSimulatie simulatie = new KantineSimulatie();
 
         simulatie.simuleer(dagen);
     }

@@ -26,8 +26,9 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>KantineSimulatie_2</mainClass>
-                    <arguments>20</arguments>
+                    <mainClass>KantineSimulatie</mainClass>
+                    <arguments>7</arguments>
+                    <cleanupDaemonThreads>false</cleanupDaemonThreads>
                 </configuration>
             </plugin>
             <plugin>

@@ -20,16 +20,19 @@ public class KantineAanbod {
 
         for (int i = 0; i < artikelnaam.length; i++) {
             ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
+            Artikel artikel = null;
+
+            // er moet tenminste één artikel in de aanbieding zijn.
+            boolean heeftKorting = i == 0 || random.nextBoolean();
+
+            if (heeftKorting) {
+                artikel = new Artikel(artikelnaam[i], prijs[i], prijs[i] * 0.2);
+            } else {
+                artikel = new Artikel(artikelnaam[i], prijs[i]);
+            }
 
             for (int j = 0; j < hoeveelheid[i]; j++) {
-                int r = random.nextInt(11);
-
-                // er moet tenminste 1 artikel in de aanbieding zijn.
-                if (r == 10 || i == 0) {
-                    artikelen.add(new Artikel(artikelnaam[i], prijs[i], prijs[i] * 0.2));
-                } else {
-                    artikelen.add(new Artikel(artikelnaam[i], prijs[i]));
-                }
+                artikelen.add(artikel);
             }
 
             startVoorraad.put(artikelnaam[i], hoeveelheid[i]);

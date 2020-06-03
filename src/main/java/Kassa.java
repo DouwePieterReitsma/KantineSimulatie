@@ -102,6 +102,7 @@ public class Kassa {
             transaction.commit();
 
             System.out.println(factuur.toString());
+            System.out.println();
 
         } catch(TeWeinigGeldException e) {
             System.out.println("Betaling mislukt voor persoon: " + persoon.toString());

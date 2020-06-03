@@ -1,6 +1,9 @@
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -8,7 +11,7 @@ import javax.persistence.*;
 @Table(name= "factuur")
 public class Factuur implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "datum")
@@ -20,9 +23,14 @@ public class Factuur implements Serializable {
     @Column(name = "totaal")
     private double totaal;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FactuurRegel> regels;
+
     public Factuur() {
         totaal = 0;
         korting = 0;
+
+        regels = new ArrayList<>();
     }
 
     public Factuur(Dienblad klant, LocalDate datum) {
@@ -89,6 +97,7 @@ public class Factuur implements Serializable {
             totaal += teBetalen;
             totaalZonderKorting += artikelPrijs;
 
+            regels.add(new FactuurRegel(this, artikel));
         }
 
         korting = totaalZonderKorting - totaal;
@@ -112,7 +121,24 @@ public class Factuur implements Serializable {
      * @return een printbaar bonnetje
      */
     public String toString() {
-        return "Factuur #" + id + ":\r\nDatum: " + datum + "\r\nKorting: " + getKorting() + "\r\nTotaal: " + getTotaal();
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(String.format("Factuur #%d %s", id, datum.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
+        builder.append("\r\n\r\n-------------------------------------\r\n\r\n");
+
+        builder.append(String.format("%-15.15s %10s %10s\r\n", "Artikel", "Korting", "Prijs"));
+        builder.append(String.format("%-15.15s %10s %10s\r\n\r\n", "-------", "-------", "-----"));
+
+        for(FactuurRegel regel : regels) {
+            builder.append(regel.toString());
+            builder.append("\r\n");
+        }
+
+        builder.append(String.format("%-15.15s %10s %10s\r\n\r\n", "-------", "-------", "-----"));
+
+        builder.append(String.format("%-15.15s %10.2f %10.2f", "Totaal:", getKorting(), getTotaal()));
+
+        return builder.toString();
     }
 
 }

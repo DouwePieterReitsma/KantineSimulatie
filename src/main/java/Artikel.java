@@ -1,5 +1,8 @@
 import java.math.BigDecimal;
 
+import javax.persistence.*;
+
+
 /*
 * week 1: opgave 1
 *
@@ -7,9 +10,15 @@ import java.math.BigDecimal;
 *
 * */
 
+@Embeddable
 public class Artikel {
+    @Column(name = "artikel")
     private String naam;
+
+    @Column(name = "prijs")
     private double prijs;
+
+    @Column(name = "korting")
     private double korting;
 
     /**
