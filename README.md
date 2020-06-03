@@ -134,5 +134,7 @@ Met ```@Embedded``` kun je de velden van een ```@Embeddable``` toevoegen aan de 
 
 4b: one-to-many, de annotatie hiervoor is ```@OneToMany```
 
-
+4e:
+* Many-to-many-relatie in de database voorkomen.
+* Extra informatie tonen die niet per se in de artikel-klasse hoeft te staan.
 

@@ -1,3 +1,5 @@
+import net.bytebuddy.asm.Advice;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.time.LocalDate;
@@ -8,6 +10,7 @@ public class Kassa {
     private double geld;
     private double toegepasteKorting;
     private KassaRij kassaRij;
+    private LocalDate datum;
 
     private EntityManager manager;
 
@@ -19,6 +22,7 @@ public class Kassa {
         this.geld = 0;
         this.toegepasteKorting = 0;
         this.kassaRij = kassarij;
+        this.datum = LocalDate.ofYearDay(2020, 1);
 
         this.manager = manager;
     }
@@ -83,7 +87,7 @@ public class Kassa {
 //        }
 
         Persoon persoon = klant.getKlant();
-        Factuur factuur = new Factuur(klant, LocalDate.now());
+        Factuur factuur = new Factuur(klant, this.datum);
 
         EntityTransaction transaction = null;
 
@@ -143,5 +147,8 @@ public class Kassa {
     public void resetKassa() {
         artikelen = 0;
         geld = 0;
+
+        // increment de dag als de kasse gereset wordt.
+        this.datum = datum.plusDays(1);
     }
 }

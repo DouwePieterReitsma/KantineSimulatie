@@ -23,7 +23,7 @@ public class Factuur implements Serializable {
     @Column(name = "totaal")
     private double totaal;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = FactuurRegel.class, mappedBy = "factuur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FactuurRegel> regels;
 
     public Factuur() {

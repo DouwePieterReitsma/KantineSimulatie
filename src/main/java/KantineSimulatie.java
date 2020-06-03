@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.*;
 
 import javax.persistence.*;
@@ -142,14 +143,87 @@ public class KantineSimulatie {
 
             int i = 1;
 
-            System.out.println("Top 3 facturen:");
-            System.out.println();
+            System.out.println("Top 3 facturen:\r\n");
 
             for(Factuur factuur : top3) {
-                System.out.println(i++ + ": " + factuur.toString());
-                System.out.println();
+                System.out.println(i++ + ": " + factuur.toString() + "\r\n");
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printTotaleOmzetEnKortingPerArtikel() {
+        try {
+            Query query = manager.createNativeQuery("SELECT artikel, SUM(prijs), SUM(korting) FROM factuurregel GROUP BY artikel");
+
+            List<Object[]> results = query.getResultList();
+
+            System.out.println("Totale omzet en korting per artikel:\r\n");
+
+            for(Object[] artikel : results) {
+                System.out.printf("Artikel: %s, Omzet: %.2f, Korting: %.2f\r\n", artikel[0], artikel[1], artikel[2]);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printTotaleOmzetEnKortingPerArtikelPerDag() {
+        try {
+            Query query = manager.createNativeQuery("SELECT DISTINCT datum FROM factuur");
+
+            List<Date> dagen = query.getResultList();
+
+            System.out.println("Totale omzet en korting per artikel per dag:\r\n");
+
+            for(Date dag : dagen) {
+                query = manager.createNativeQuery("SELECT fr.artikel, SUM(fr.prijs), SUM(fr.korting) FROM `factuurregel` fr JOIN factuur f ON fr.factuur_id = f.id WHERE f.datum = ?1 GROUP BY fr.artikel");
+
+                query.setParameter(1, dag);
+
+                System.out.printf("Datum: %s\r\n", dag);
+
+                List<Object[]> artikelen = query.getResultList();
+
+                for(Object[] artikel : artikelen) {
+                    System.out.printf("Artikel: %s, Omzet: %.2f, Korting: %.2f\r\n", artikel[0], artikel[1], artikel[2]);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printTop3MeestPopulaireArtikelen() {
+        try {
+            Query query = manager.createNativeQuery("SELECT artikel, COUNT(*) AS aantal FROM factuurregel GROUP BY artikel ORDER BY COUNT(*) DESC LIMIT 3");
+
+            List<Object[]> artikelen = query.getResultList();
+
+            System.out.println("Top 3 meest populaire artikelen:\r\n");
+
+            for(Object[] artikel : artikelen) {
+                System.out.printf("Artikel: %s, Aantal verkocht: %d\r\n", artikel[0], artikel[1]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void printTop3ArtikelenMetHoogsteOmzet() {
+        try {
+            Query query = manager.createNativeQuery("SELECT artikel, SUM(prijs) AS aantal FROM factuurregel GROUP BY artikel ORDER BY SUM(prijs) DESC LIMIT 3");
+
+            List<Object[]> artikelen = query.getResultList();
+
+            System.out.println("Top 3 artikelen met hoogste omzet:\r\n");
+
+            for(Object[] artikel : artikelen) {
+                System.out.printf("Artikel: %s, Totale omzet: %.2f\r\n", artikel[0], artikel[1]);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,6 +310,7 @@ public class KantineSimulatie {
         double[] dagTotalen = Administratie.berekenDagOmzet(omzetPerDag);
 
         System.out.println("Simulatie afgelopen");
+
         System.out.println("----------------------------------");
         System.out.println("Totale omzet op maandagen: " + dagTotalen[0]);
         System.out.println("Totale omzet op dinsdagen: " + dagTotalen[1]);
@@ -253,6 +328,18 @@ public class KantineSimulatie {
 
         System.out.println("----------------------------------");
         printTop3Facturen();
+
+        System.out.println("----------------------------------");
+        printTotaleOmzetEnKortingPerArtikel();
+
+        System.out.println("----------------------------------");
+        printTotaleOmzetEnKortingPerArtikelPerDag();
+
+        System.out.println("----------------------------------");
+        printTop3MeestPopulaireArtikelen();
+
+        System.out.println("----------------------------------");
+        printTop3ArtikelenMetHoogsteOmzet();
 
         manager.close();
         ENTITY_MANAGER_FACTORY.close();
