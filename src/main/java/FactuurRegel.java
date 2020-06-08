@@ -17,7 +17,7 @@ public class FactuurRegel implements Serializable {
     @JoinColumn(name = "artikel", referencedColumnName = "naam")
     private Artikel artikel;
 
-    // dit lijkt dubbelop, maar ik doe dit om te voorkomen dat de prijs en korting van het artikel wordt overschreven in de database.
+    // dit lijkt dubbelop, maar ik doe dit omdat de prijs wordt overschreven in de database als je artikel.setPrijs() aanroept.
     private double korting;
     private double prijs;
 
@@ -47,6 +47,6 @@ public class FactuurRegel implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%-15.15s       %.2f       %.2f", artikel.getNaam(), korting, prijs);
+        return String.format("%-15.15s       %.2f       %.2f       %.2f", artikel.getNaam(), artikel.getPrijs(), korting, prijs);
     }
 }

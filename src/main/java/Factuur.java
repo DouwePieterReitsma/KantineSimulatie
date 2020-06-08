@@ -141,17 +141,17 @@ public class Factuur implements Serializable {
         builder.append(String.format("Factuur #%d %s", id, datum.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
         builder.append("\r\n\r\n-------------------------------------\r\n\r\n");
 
-        builder.append(String.format("%-15.15s %10s %10s\r\n", "Artikel", "Korting", "Prijs"));
-        builder.append(String.format("%-15.15s %10s %10s\r\n\r\n", "-------", "-------", "-----"));
+        builder.append(String.format("%-15.15s %10s %10s %10s\r\n", "Artikel", "Prijs", "Korting", "Subtotaal"));
+        builder.append(String.format("%-15.15s %10s %10s %10s\r\n\r\n", "-------", "-----", "-------", "---------"));
 
         for(FactuurRegel regel : regels) {
             builder.append(regel.toString());
             builder.append("\r\n");
         }
 
-        builder.append(String.format("%-15.15s %10s %10s\r\n\r\n", "-------", "-------", "-----"));
+        builder.append(String.format("%-15.15s %10s %10s %10s\r\n\r\n", "-------", "-----", "-------", "---------"));
 
-        builder.append(String.format("%-15.15s %10.2f %10.2f", "Totaal:", getKorting(), getTotaal()));
+        builder.append(String.format("%-15.15s            %10.2f %10.2f", "Totaal:", getKorting(), getTotaal()));
 
         return builder.toString();
     }

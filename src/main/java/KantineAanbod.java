@@ -64,14 +64,24 @@ public class KantineAanbod {
 //    }
 
 
+    /**
+     * Deze methode vult de voorraad van een artikel in de database aan.
+     * @param voorraad
+     */
     private void vulVoorraadAan(Voorraad voorraad) {
         System.out.println("Voorraad wordt aangevuld! Artikel: " + voorraad.getArtikel().getNaam());
 
-        voorraad.setVoorraad(voorraad.getStartvoorraad());
+        voorraad.setVoorraad(voorraad.getVoorraad() + voorraad.getStartvoorraad());
 
         manager.persist(voorraad);
     }
 
+    /**
+     * Deze methode haalt de voorraad die bij een product hoort op.
+     *
+     * @param productnaam
+     * @return voorraad of null
+     */
     private Voorraad vraagVoorraadOp(String productnaam) {
         try {
             return (Voorraad) manager.createQuery("SELECT v FROM Voorraad v WHERE v.artikel.naam = :productnaam")
