@@ -68,6 +68,13 @@ public class Factuur implements Serializable {
             medewerkerskorting = kantineMedewerker.geefKortingsPercentage();
             heeftMaximum = kantineMedewerker.heeftMaximum();
             maxKorting = kantineMedewerker.geefMaximum();
+
+        } else if(persoon.heeftBonuskaart()) {
+            BonusKaart bonusKaart = new BonusKaart();
+
+            medewerkerskorting = bonusKaart.geefKortingsPercentage();
+            heeftMaximum = bonusKaart.heeftMaximum();
+            maxKorting = bonusKaart.geefMaximum();
         }
 
         Iterator<Artikel> iterator = klant.getArtikelenIterator();
@@ -90,17 +97,22 @@ public class Factuur implements Serializable {
                 if (heeftMaximum) {
                     if (artikelPrijs - teBetalen > maxKorting) {
                         teBetalen = artikelPrijs - maxKorting;
+
+                        artikel.setKorting(maxKorting);
                     }
+                }
+                else {
+                    artikel.setKorting(artikelKorting);
                 }
             }
 
             totaal += teBetalen;
             totaalZonderKorting += artikelPrijs;
 
+            korting += artikel.getKorting();
+
             regels.add(new FactuurRegel(this, artikel));
         }
-
-        korting = totaalZonderKorting - totaal;
     }
 
     /*

@@ -252,7 +252,10 @@ public class KantineSimulatie {
                 if (r <= AANTAL_KANTINEMEDEWERKERS) {
                     klanten.add(new KantineMedewerker());
                 } else if(r <= AANTAL_STUDENTEN + AANTAL_KANTINEMEDEWERKERS) {
-                    klanten.add(new Student());
+                    Student student = new Student();
+                    student.setHeeftBonuskaart(random.nextBoolean());
+
+                    klanten.add(student);
                 } else if(r <= AANTAL_DOCENTEN + AANTAL_STUDENTEN + AANTAL_KANTINEMEDEWERKERS) {
                     klanten.add(new Docent());
                 }
@@ -286,6 +289,9 @@ public class KantineSimulatie {
                 // artikelen, sluit aan
 
                 kantine.loopPakSluitAan(dienblad, artikelen);
+
+                // voeg de klant toe aan de database
+                manager.persist(klant);
 
             }
 

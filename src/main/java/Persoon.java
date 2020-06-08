@@ -1,18 +1,43 @@
+import com.sun.istack.Nullable;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Random;
+
+@Entity
+@Table(name="persoon")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Persoon {
+    @Id
+    @Column(name = "BSN")
     private String BSN;
+
+    @Column(name = "voornaam")
     private String voornaam;
+
+    @Column(name = "achternaam")
     private String achternaam;
-    private Datum geboorteDatum;
+
+    @Column(name = "geboortedatum")
+    private LocalDate geboortedatum;
+
+    @Column(name = "geslacht")
     private char geslacht;
 
+    @Column(name = "heeftBonuskaart")
+    private boolean heeftBonuskaart;
+
+    @Transient
     private Betaalwijze betaalwijze;
 
     /**
      * default constructor
      */
     public Persoon() {
-        this.geboorteDatum = null;
+        this.geboortedatum = null;
         this.geslacht = 'O';
+
+        this.BSN = genereerRandomBSN();
     }
 
     /**
@@ -23,11 +48,11 @@ public class Persoon {
      * @param geboorteDatum
      * @param geslacht
      */
-    public Persoon(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht) {
+    public Persoon(String BSN, String voornaam, String achternaam, LocalDate geboorteDatum, char geslacht) {
         this.BSN = BSN;
         this.voornaam = voornaam;
         this.achternaam = achternaam;
-        this.geboorteDatum = geboorteDatum;
+        this.geboortedatum = geboorteDatum;
         setGeslacht(geslacht);
     }
 
@@ -55,14 +80,12 @@ public class Persoon {
         this.achternaam = achternaam;
     }
 
-    public String getGeboorteDatum() {
-        if (geboorteDatum == null) return "Onbekend";
-
-        return geboorteDatum.getDatumAsString();
+    public String getGeboortedatum() {
+        return geboortedatum == null ? "Onbekend" : geboortedatum.toString();
     }
 
-    public void setGeboorteDatum(Datum geboorteDatum) {
-        this.geboorteDatum = geboorteDatum;
+    public void setGeboortedatum(LocalDate geboortedatum) {
+        this.geboortedatum = geboortedatum;
     }
 
     public String getGeslacht() {
@@ -92,13 +115,27 @@ public class Persoon {
         this.betaalwijze = betaalwijze;
     }
 
+    private String genereerRandomBSN() {
+        Random random = new Random();
+
+        return "bsn" + random.nextInt();
+    }
+
+    public boolean heeftBonuskaart() {
+        return heeftBonuskaart;
+    }
+
+    public void setHeeftBonuskaart(boolean heeftBonuskaart) {
+        this.heeftBonuskaart = heeftBonuskaart;
+    }
+
     @Override
     public String toString() {
         return "Persoon{" +
                 "BSN='" + getBSN() + '\'' +
                 ", voornaam='" + getVoornaam() + '\'' +
                 ", achternaam='" + getAchternaam() + '\'' +
-                ", geboorteDatum=" + getGeboorteDatum() +
+                ", geboortedatum=" + getGeboortedatum() +
                 ", geslacht=" + getGeslacht() +
                 '}';
     }

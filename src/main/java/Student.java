@@ -1,5 +1,14 @@
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.time.LocalDate;
+
+@Entity
 public class Student extends Persoon {
+    @Column(name = "studentnummer")
     private int studentnummer;
+
+    @Column(name = "studierichting")
     private String studierichting;
 
     /**
@@ -19,7 +28,7 @@ public class Student extends Persoon {
      * @param studentnummer
      * @param studierichting
      */
-    public Student(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht, int studentnummer, String studierichting) {
+    public Student(String BSN, String voornaam, String achternaam, LocalDate geboorteDatum, char geslacht, int studentnummer, String studierichting) {
         super(BSN, voornaam, achternaam, geboorteDatum, geslacht);
 
         this.studentnummer = studentnummer;

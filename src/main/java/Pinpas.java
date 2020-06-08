@@ -1,3 +1,5 @@
+import javax.persistence.Entity;
+
 public class Pinpas extends Betaalwijze {
 
     private double kredietlimiet;

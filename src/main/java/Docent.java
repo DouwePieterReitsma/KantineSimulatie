@@ -1,5 +1,14 @@
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.time.LocalDate;
+
+@Entity
 public class Docent extends Persoon implements KortingskaartHouder {
+    @Column(name = "afkorting")
     private String afkorting;
+
+    @Column(name = "afdeling")
     private String afdeling;
 
     /**
@@ -19,7 +28,7 @@ public class Docent extends Persoon implements KortingskaartHouder {
      * @param afkorting String van 4 letters
      * @param afdeling
      */
-    public Docent(String BSN, String voornaam, String achternaam, Datum geboorteDatum, char geslacht, String afkorting, String afdeling) {
+    public Docent(String BSN, String voornaam, String achternaam, LocalDate geboorteDatum, char geslacht, String afkorting, String afdeling) {
         super(BSN, voornaam, achternaam, geboorteDatum, geslacht);
         this.afkorting = afkorting;
         this.afdeling = afdeling;
