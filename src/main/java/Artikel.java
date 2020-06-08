@@ -10,9 +10,10 @@ import javax.persistence.*;
 *
 * */
 
-@Embeddable
+@Entity
 public class Artikel {
-    @Column(name = "artikel")
+    @Id
+    @Column(name = "naam")
     private String naam;
 
     @Column(name = "prijs")

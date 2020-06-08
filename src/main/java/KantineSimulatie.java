@@ -58,7 +58,7 @@ public class KantineSimulatie {
 
         random = new Random();
         int[] hoeveelheden = getRandomArray(AANTAL_ARTIKELEN, MIN_ARTIKELEN_PER_SOORT, MAX_ARTIKELEN_PER_SOORT);
-        kantineaanbod = new KantineAanbod(artikelnamen, artikelprijzen, hoeveelheden);
+        kantineaanbod = new KantineAanbod(manager, artikelnamen, artikelprijzen, hoeveelheden);
 
         kantine.setKantineAanbod(kantineaanbod);
     }
@@ -156,7 +156,7 @@ public class KantineSimulatie {
 
     private void printTotaleOmzetEnKortingPerArtikel() {
         try {
-            Query query = manager.createNativeQuery("SELECT artikel, SUM(prijs), SUM(korting) FROM factuurregel GROUP BY artikel");
+            Query query = manager.createNativeQuery("SELECT artikel, SUM(a.prijs), SUM(a.korting) FROM factuurregel fr JOIN artikel a ON fr.artikel = a.naam GROUP BY artikel");
 
             List<Object[]> results = query.getResultList();
 
@@ -180,7 +180,7 @@ public class KantineSimulatie {
             System.out.println("Totale omzet en korting per artikel per dag:\r\n");
 
             for(Date dag : dagen) {
-                query = manager.createNativeQuery("SELECT fr.artikel, SUM(fr.prijs), SUM(fr.korting) FROM `factuurregel` fr JOIN factuur f ON fr.factuur_id = f.id WHERE f.datum = ?1 GROUP BY fr.artikel");
+                query = manager.createNativeQuery("SELECT fr.artikel, SUM(a.prijs), SUM(a.korting) FROM `factuurregel` fr JOIN factuur f ON fr.factuur_id = f.id JOIN artikel a ON fr.artikel = a.naam WHERE f.datum = ?1 GROUP BY fr.artikel");
 
                 query.setParameter(1, dag);
 
@@ -215,7 +215,7 @@ public class KantineSimulatie {
 
     private void printTop3ArtikelenMetHoogsteOmzet() {
         try {
-            Query query = manager.createNativeQuery("SELECT artikel, SUM(prijs) AS aantal FROM factuurregel GROUP BY artikel ORDER BY SUM(prijs) DESC LIMIT 3");
+            Query query = manager.createNativeQuery("SELECT fr.artikel, SUM(a.prijs) AS aantal FROM factuurregel fr JOIN artikel a ON fr.artikel = a.naam GROUP BY fr.artikel ORDER BY SUM(a.prijs) DESC LIMIT 3");
 
             List<Object[]> artikelen = query.getResultList();
 

@@ -13,7 +13,8 @@ public class FactuurRegel implements Serializable {
     @JoinColumn(name = "factuur_id")
     private Factuur factuur;
 
-    @Embedded
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "artikel", referencedColumnName = "naam")
     private Artikel artikel;
 
     public FactuurRegel() {

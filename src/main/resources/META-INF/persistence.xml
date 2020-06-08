@@ -10,6 +10,7 @@
         <class>Student</class>
         <class>KantineMedewerker</class>
         <class>Docent</class>
+        <class>Voorraad</class>
         <properties>
             <!-- The JDBC driver of your database -->
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

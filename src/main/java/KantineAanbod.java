@@ -1,25 +1,35 @@
+import org.hibernate.Transaction;
+import org.hibernate.annotations.LazyCollection;
+
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.*;
 
 public class KantineAanbod {
     // interne opslag voorraad
-    private HashMap<String, ArrayList<Artikel>> aanbod;
-    private HashMap<String, Integer> startVoorraad;
-    private HashMap<String, Double> prijzen;
+//    private HashMap<String, ArrayList<Artikel>> aanbod;
+//    private HashMap<String, Integer> startVoorraad;
+//    private HashMap<String, Double> prijzen;
+
+    private EntityManager manager;
 
     /**
-     * Constructor. Het eerste argument is een lijst met artikelnamen, het tweede argument is
-     * eenlijst met prijzen en het derde argument is een lijst met hoeveelheden. Let op: de
+     * Constructor. Het tweede argument is een lijst met artikelnamen, het derde argument is
+     * eenlijst met prijzen en het vierde argument is een lijst met hoeveelheden. Let op: de
      * dimensies van de drie arrays moeten wel gelijk zijn!
      */
-    public KantineAanbod(String[] artikelnaam, double[] prijs, int[] hoeveelheid) {
-        aanbod = new HashMap<String, ArrayList<Artikel>>();
-        startVoorraad = new HashMap<String, Integer>();
-        prijzen = new HashMap<String, Double>();
+
+    public KantineAanbod(EntityManager manager, String[] artikelnaam, double[] prijs, int[] hoeveelheid) {
+        this.manager = manager;
+
+//        aanbod = new HashMap<String, ArrayList<Artikel>>();
+//        startVoorraad = new HashMap<String, Integer>();
+//        prijzen = new HashMap<String, Double>();
 
         Random random = new Random();
 
         for (int i = 0; i < artikelnaam.length; i++) {
-            ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
+//            ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
             Artikel artikel = null;
 
             // er moet tenminste één artikel in de aanbieding zijn.
@@ -31,13 +41,21 @@ public class KantineAanbod {
                 artikel = new Artikel(artikelnaam[i], prijs[i]);
             }
 
-            for (int j = 0; j < hoeveelheid[i]; j++) {
-                artikelen.add(artikel);
-            }
+            Voorraad voorraad = new Voorraad(artikel, hoeveelheid[i], hoeveelheid[i]);
 
-            startVoorraad.put(artikelnaam[i], hoeveelheid[i]);
-            prijzen.put(artikelnaam[i], prijs[i]);
-            aanbod.put(artikelnaam[i], artikelen);
+            EntityTransaction transaction = manager.getTransaction();
+            transaction.begin();
+            manager.persist(voorraad);
+
+            transaction.commit();
+
+//            for (int j = 0; j < hoeveelheid[i]; j++) {
+//                artikelen.add(artikel);
+//            }
+//
+//            startVoorraad.put(artikelnaam[i], hoeveelheid[i]);
+//            prijzen.put(artikelnaam[i], prijs[i]);
+//            aanbod.put(artikelnaam[i], artikelen);
         }
     }
 
@@ -45,45 +63,70 @@ public class KantineAanbod {
      * Private methode om de voorraad van de kantine aan te vullen
      * @param productnaam
      */
-    private void vulVoorraadAan(String productnaam) {
-        ArrayList<Artikel> huidigeVoorraad = aanbod.get(productnaam);
-        int startHoeveelheid = startVoorraad.get(productnaam);
-        int huidigeHoeveelheid = huidigeVoorraad.size();
-        double prijs = prijzen.get(productnaam);
+//    private void vulVoorraadAan(String productnaam) {
+////        ArrayList<Artikel> huidigeVoorraad = aanbod.get(productnaam);
+////        int startHoeveelheid = startVoorraad.get(productnaam);
+////        int huidigeHoeveelheid = huidigeVoorraad.size();
+////        double prijs = prijzen.get(productnaam);
+////
+////        for (int j = huidigeHoeveelheid; j < startHoeveelheid; j++) {
+////            huidigeVoorraad.add(new Artikel(productnaam, prijs));
+////        }
+////
+////        aanbod.put(productnaam, huidigeVoorraad);
+//        Voorraad v = vraagVoorraadOp(productnaam);
+//
+//        if (v != null) {
+//            v.setVoorraad(v.getStartvoorraad());
+//
+//            manager.persist(v);
+//        }
+//    }
 
-        for (int j = huidigeHoeveelheid; j < startHoeveelheid; j++) {
-            huidigeVoorraad.add(new Artikel(productnaam, prijs));
+    private void vulVoorraadAan(Voorraad voorraad) {
+        voorraad.setVoorraad(voorraad.getStartvoorraad());
+
+        manager.persist(voorraad);
+    }
+
+    private Voorraad vraagVoorraadOp(String productnaam) {
+        try {
+            return (Voorraad) manager.createQuery("SELECT v FROM Voorraad v WHERE v.artikel.naam = :productnaam")
+                    .setParameter("productnaam", productnaam)
+                    .getSingleResult();
+        } catch(Exception e) {
+            e.printStackTrace();
+
+            return null;
         }
-
-        aanbod.put(productnaam, huidigeVoorraad);
     }
 
     /*
      * Private methode om de lijst van artikelen te krijgen op basis van de naam van het artikel.
      * Retourneert null als artikel niet bestaat.
      */
-    private ArrayList<Artikel> getArrayList(String productnaam) {
-        return aanbod.get(productnaam);
-    }
+//    private ArrayList<Artikel> getArrayList(String productnaam) {
+//        return aanbod.get(productnaam);
+//    }
 
     /**
      * Private methode om een Artikel van de stapel artikelen af te pakken. Retourneert null als de
      * stapel leeg is.
      */
-    private Artikel getArtikel(ArrayList<Artikel> stapel) {
-        if (stapel == null) {
-            return null;
-        }
-        if (stapel.size() == 0) {
-            return null;
-        } else {
-            Artikel a = stapel.get(0);
-            stapel.remove(0);
-            if (stapel.size() <= 10)
-                vulVoorraadAan(a.getNaam());
-            return a;
-        }
-    }
+//    private Artikel getArtikel(ArrayList<Artikel> stapel) {
+//        if (stapel == null) {
+//            return null;
+//        }
+//        if (stapel.size() == 0) {
+//            return null;
+//        } else {
+//            Artikel a = stapel.get(0);
+//            stapel.remove(0);
+//            if (stapel.size() <= 10)
+//                vulVoorraadAan(a.getNaam());
+//            return a;
+//        }
+//    }
 
     /**
      * Publieke methode om een artikel via naam van de stapel te pakken. Retouneert null als artikel
@@ -93,6 +136,22 @@ public class KantineAanbod {
      * @return artikel (of null)
      */
     public Artikel getArtikel(String productnaam) {
-        return getArtikel(getArrayList(productnaam));
+        //return getArtikel(getArrayList(productnaam));
+
+        Voorraad v = vraagVoorraadOp(productnaam);
+
+        if (v == null) return null;
+
+        if (v.getVoorraad() == 0) return null;
+
+        v.setVoorraad(v.getVoorraad() - 1);
+
+        if (v.getVoorraad() <= v.getKantelpunt()) {
+            vulVoorraadAan(v);
+        } else {
+            manager.persist(v);
+        }
+
+        return v.getArtikel();
     }
 }
