@@ -6,11 +6,6 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 public class KantineAanbod {
-    // interne opslag voorraad
-//    private HashMap<String, ArrayList<Artikel>> aanbod;
-//    private HashMap<String, Integer> startVoorraad;
-//    private HashMap<String, Double> prijzen;
-
     private EntityManager manager;
 
     /**
@@ -22,14 +17,9 @@ public class KantineAanbod {
     public KantineAanbod(EntityManager manager, String[] artikelnaam, double[] prijs, int[] hoeveelheid) {
         this.manager = manager;
 
-//        aanbod = new HashMap<String, ArrayList<Artikel>>();
-//        startVoorraad = new HashMap<String, Integer>();
-//        prijzen = new HashMap<String, Double>();
-
         Random random = new Random();
 
         for (int i = 0; i < artikelnaam.length; i++) {
-//            ArrayList<Artikel> artikelen = new ArrayList<Artikel>();
             Artikel artikel = null;
 
             // er moet tenminste één artikel in de aanbieding zijn.
@@ -41,21 +31,11 @@ public class KantineAanbod {
                 artikel = new Artikel(artikelnaam[i], prijs[i]);
             }
 
-            Voorraad voorraad = new Voorraad(artikel, hoeveelheid[i], hoeveelheid[i]);
+            Voorraad voorraad = new Voorraad(artikel, hoeveelheid[i], 4);
 
-            EntityTransaction transaction = manager.getTransaction();
-            transaction.begin();
+            manager.getTransaction().begin();
             manager.persist(voorraad);
-
-            transaction.commit();
-
-//            for (int j = 0; j < hoeveelheid[i]; j++) {
-//                artikelen.add(artikel);
-//            }
-//
-//            startVoorraad.put(artikelnaam[i], hoeveelheid[i]);
-//            prijzen.put(artikelnaam[i], prijs[i]);
-//            aanbod.put(artikelnaam[i], artikelen);
+            manager.getTransaction().commit();
         }
     }
 
@@ -83,7 +63,10 @@ public class KantineAanbod {
 //        }
 //    }
 
+
     private void vulVoorraadAan(Voorraad voorraad) {
+        System.out.println("Voorraad wordt aangevuld! Artikel: " + voorraad.getArtikel().getNaam());
+
         voorraad.setVoorraad(voorraad.getStartvoorraad());
 
         manager.persist(voorraad);
@@ -146,11 +129,15 @@ public class KantineAanbod {
 
         v.setVoorraad(v.getVoorraad() - 1);
 
+        manager.getTransaction().begin();
+
         if (v.getVoorraad() <= v.getKantelpunt()) {
             vulVoorraadAan(v);
         } else {
             manager.persist(v);
         }
+
+        manager.getTransaction().commit();
 
         return v.getArtikel();
     }

@@ -86,6 +86,8 @@ public class Factuur implements Serializable {
             double teBetalen = 0;
             double artikelKorting = artikel.getKorting();
 
+            FactuurRegel factuurRegel = new FactuurRegel(this, artikel);
+
             // als het artikel in de aanbieding is geld de medewerkerskorting niet.
             if (artikelKorting > 0) {
                 teBetalen = artikelPrijs - artikelKorting;
@@ -98,20 +100,21 @@ public class Factuur implements Serializable {
                     if (artikelPrijs - teBetalen > maxKorting) {
                         teBetalen = artikelPrijs - maxKorting;
 
-                        artikel.setKorting(maxKorting);
+                        factuurRegel.setKorting(maxKorting);
                     }
                 }
                 else {
-                    artikel.setKorting(artikelKorting);
+                    factuurRegel.setKorting(artikelKorting);
                 }
             }
 
             totaal += teBetalen;
             totaalZonderKorting += artikelPrijs;
+            korting += factuurRegel.getKorting();
 
-            korting += artikel.getKorting();
+            factuurRegel.setPrijs(teBetalen);
 
-            regels.add(new FactuurRegel(this, artikel));
+            regels.add(factuurRegel);
         }
     }
 

@@ -148,7 +148,7 @@ public class Kassa {
         artikelen = 0;
         geld = 0;
 
-        // increment de dag als de kasse gereset wordt.
+        // increment de dag als de kassa gereset wordt.
         this.datum = datum.plusDays(1);
     }
 }
